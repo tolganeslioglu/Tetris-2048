@@ -3,9 +3,11 @@ __pycache__/
 *.py[cod]
 *.pyo
 
-# Ignore virtual environments
+# Environments
 venv/
 .venv/
+env/
+.env
 
 # Ignore Visual Studio Code settings
 .vscode/
