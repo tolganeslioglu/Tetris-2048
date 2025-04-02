@@ -93,6 +93,21 @@ BOOK_LIGHT_BLUE = Color(103, 198, 243)
 # Shade of red used in Algorithms 4th edition
 BOOK_RED   = Color(150,  35,  31)
 
+# Some Colors used in Tetris 2048
+EMPTY_CELL = Color(193, 179, 164)
+LINE_COLOR = Color(173, 157, 143)
+BOUNDRY_COLOR = Color(103, 95, 85)
+TILE_2 = Color(238, 228, 218)
+TILE_4 = Color(237, 224, 200)
+TILE_8 = Color(242, 177, 121)
+TILE_16 = Color(245, 149, 99)
+TILE_32 = Color(246, 124, 96)
+TILE_64 = Color(246, 94, 59)
+TILE_128 = Color(237, 207, 115)
+TILE_256 = Color(237, 204, 98)
+TILE_512 = Color(237, 200, 80)
+TILE_1024 = Color(237, 197, 63)
+TILE_2048 = Color(237, 194, 45)
 #-----------------------------------------------------------------------
 
 def _main():
