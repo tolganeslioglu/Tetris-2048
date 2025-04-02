@@ -1,5 +1,5 @@
 import lib.stddraw as stddraw  # used for drawing the tiles to display them
-from lib.color import Color  # used for coloring the tiles
+import lib.color as color
 
 # A class for modeling numbered tiles as in 2048
 class Tile:
@@ -11,13 +11,32 @@ class Tile:
    font_family, font_size = "Arial", 14
 
    # A constructor that creates a tile with 2 as the number on it
-   def __init__(self):
-      # set the number on this tile
-      self.number = 2
-      # set the colors of this tile
-      self.background_color = Color(151, 178, 199)  # background (tile) color
-      self.foreground_color = Color(0, 100, 200)  # foreground (number) color
-      self.box_color = Color(0, 100, 200)  # box (boundary) color
+   def __init__(self, number=2, number_color=None, background_color=None):
+      self.number = number
+      
+      # Determine the foreground (number) color
+      if number_color is None:
+         if number in (2, 4):
+               self.foreground_color = color.BOUNDRY_COLOR
+         else:
+               self.foreground_color = color.WHITE
+      else:
+         self.foreground_color = number_color
+
+      # Determine the background color
+      if background_color is None:
+         background_color_name = "TILE_" + str(number)
+         try:
+            self.background_color = getattr(color, background_color_name)
+         except AttributeError:
+            print(f"Warning: Color {background_color_name} not found. Using default TILE_2.")
+            self.background_color = color.TILE_2
+      else:
+         self.background_color = background_color
+
+      # Box (boundary) color
+      self.box_color = color.LINE_COLOR
+
 
    # A method for drawing this tile at a given position with a given length
    def draw(self, position, length=1):  # length defaults to 1

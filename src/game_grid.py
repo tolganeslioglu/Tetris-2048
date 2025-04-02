@@ -1,7 +1,7 @@
 import lib.stddraw as stddraw  # used for displaying the game grid
-from lib.color import Color  # used for coloring the game grid
 from point import Point  # used for tile positions
 import numpy as np  # fundamental Python module for scientific computing
+import lib.color as color  # used for coloring the game grid
 
 # A class for modeling the game grid
 class GameGrid:
@@ -17,10 +17,10 @@ class GameGrid:
       # the game_over flag shows whether the game is over or not
       self.game_over = False
       # set the color used for the empty grid cells
-      self.empty_cell_color = Color(193, 179, 164) 
+      self.empty_cell_color = color.EMPTY_CELL
       # set the colors used for the grid lines and the grid boundaries
-      self.line_color = Color(173, 157, 143) 
-      self.boundary_color = Color(103, 95, 85)
+      self.line_color = color.LINE_COLOR
+      self.boundary_color = color.BOUNDRY_COLOR
       # thickness values used for the grid lines and the grid boundaries
       self.line_thickness = 0.006
       self.box_thickness = 0.010
