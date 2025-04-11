@@ -11,28 +11,22 @@ class Tile:
    font_family, font_size = "Arial", 14
 
    # A constructor that creates a tile with 2 as the number on it
-   def __init__(self, number=2, number_color=None, background_color=None):
+   def __init__(self, number=2):
       self.number = number
       
       # Determine the foreground (number) color
-      if number_color is None:
-         if number in (2, 4):
-               self.foreground_color = color.BOUNDRY_COLOR
-         else:
-               self.foreground_color = color.WHITE
+      if number in (2, 4):
+         self.foreground_color = color.BOUNDRY_COLOR
       else:
-         self.foreground_color = number_color
+         self.foreground_color = color.WHITE
 
       # Determine the background color
-      if background_color is None:
-         background_color_name = "TILE_" + str(number)
-         try:
-            self.background_color = getattr(color, background_color_name)
-         except AttributeError:
-            print(f"Warning: Color {background_color_name} not found. Using default TILE_2.")
-            self.background_color = color.TILE_2
-      else:
-         self.background_color = background_color
+      background_color_name = "TILE_" + str(number)
+      try:
+         self.background_color = getattr(color, background_color_name)
+      except AttributeError:
+         print(f"Warning: Color {background_color_name} not found. Using default TILE_2.")
+         self.background_color = color.TILE_2
 
       # Box (boundary) color
       self.box_color = color.LINE_COLOR
