@@ -63,6 +63,7 @@ def start():
          elif key_typed == "Z" or key_typed == "z":
             # rotate the active tetromino counterclockwise
             current_tetromino.rotate_counter_clockwise(grid)
+         
          elif key_typed == "space":
             # hard drop: move the active tetromino down until it lands
             while current_tetromino.move("down", grid):
