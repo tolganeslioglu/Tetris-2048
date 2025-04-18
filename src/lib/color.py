@@ -93,7 +93,7 @@ BOOK_LIGHT_BLUE = Color(103, 198, 243)
 # Shade of red used in Algorithms 4th edition
 BOOK_RED   = Color(150,  35,  31)
 
-# Some Colors used in Tetris 2048
+# Some Colors used in our project Tetris 2048
 EMPTY_CELL = Color(193, 179, 164)
 LINE_COLOR = Color(173, 157, 143)
 BOUNDRY_COLOR = Color(103, 95, 85)

@@ -55,10 +55,14 @@ def start():
             # move the active tetromino down by one
             # (soft drop: causes the tetromino to fall down faster)
             current_tetromino.move(key_typed, grid)
-         elif key_typed == "space":
-            # hard drop: move the active tetromino down until it lands
-            while current_tetromino.move("down", grid):
-                pass
+         
+         elif key_typed == "C" or key_typed == "c":   
+            # rotate the active tetromino clockwise
+            current_tetromino.rotate_clockwise(grid) 
+
+         elif key_typed == "Z" or key_typed == "z":
+            # rotate the active tetromino counterclockwise
+            current_tetromino.rotate_counter_clockwise(grid)
          # clear the queue of the pressed keys for a smoother interaction
          stddraw.clearKeysTyped()
 
@@ -74,6 +78,12 @@ def start():
          # end the main game loop if the game is over
          if game_over:
             break
+         
+         # Merging and Clearing and Free Tiles
+         grid.merge_tiles()
+         grid.clear_full_rows()
+         grid.handle_free_tiles()
+
          # create the next tetromino to enter the game grid
          # by using the create_tetromino function defined below
          current_tetromino = create_tetromino()
