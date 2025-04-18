@@ -4,7 +4,7 @@ import copy as cp  # the copy module is used for copying tiles and positions
 import random  # the random module is used for generating random values
 import numpy as np  # the fundamental Python module for scientific computing
 
-# A class for modeling tetrominoes with 3 out of 7 different types as I, O and Z
+# A class for modeling tetrominoes with 7 different types: I, O, Z, S, J, L and T
 class Tetromino:
    # the dimensions of the game grid (defined as class variables)
    grid_height, grid_width = None, None
@@ -36,6 +36,34 @@ class Tetromino:
          occupied_cells.append((1, 1))
          occupied_cells.append((1, 2))
          occupied_cells.append((2, 2))
+      elif self.type == 'S':
+         n = 3  # n = number of rows = number of columns in the tile matrix
+         # shape of the tetromino S in its initial rotation state
+         occupied_cells.append((1, 1))
+         occupied_cells.append((2, 1))
+         occupied_cells.append((0, 2))
+         occupied_cells.append((1, 2))
+      elif self.type == 'J':
+         n = 3
+         # shape of the tetromino J in its initial rotation state
+         occupied_cells.append((0, 0))
+         occupied_cells.append((0, 1))
+         occupied_cells.append((1, 1))
+         occupied_cells.append((2, 1))
+      elif self.type == 'L':
+         n = 3
+         # shape of the tetromino L in its initial rotation state
+         occupied_cells.append((2, 0))
+         occupied_cells.append((0, 1))
+         occupied_cells.append((1, 1))
+         occupied_cells.append((2, 1))
+      elif self.type == 'T':
+         n = 3
+         # shape of the tetromino T in its initial rotation state
+         occupied_cells.append((1, 0))
+         occupied_cells.append((0, 1))
+         occupied_cells.append((1, 1))
+         occupied_cells.append((2, 1))
       # create a matrix of numbered tiles based on the shape of this tetromino
       self.tile_matrix = np.full((n, n), None)
       # create the four tiles (minos) of this tetromino and place these tiles
