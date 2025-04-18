@@ -70,8 +70,10 @@ class Tetromino:
       # into the tile matrix
       for i in range(len(occupied_cells)):
          col_index, row_index = occupied_cells[i][0], occupied_cells[i][1]
+         # pick 4 with %10 change, otherwise 2
+         tile_number = 4 if random.random() < 0.1 else 2
          # create a tile for each occupied cell of this tetromino
-         self.tile_matrix[row_index][col_index] = Tile()
+         self.tile_matrix[row_index][col_index] = Tile(tile_number)
       # initialize the position of this tetromino (as the bottom left cell in
       # the tile matrix) with a random horizontal position above the game grid
       self.bottom_left_cell = Point()
@@ -203,3 +205,48 @@ class Tetromino:
                   break  # end the inner for loop
       # if this method does not end by returning False before this line
       return True  # this tetromino can be moved in the given direction
+   
+   # A method for checking if this tetromino can be rotated on the game grid
+   def can_be_rotated(self, game_grid):
+      compact_matrix, blc_position = self.get_min_bounded_tile_matrix(True)
+      n_rows, n_cols = len(compact_matrix), len(compact_matrix[0])
+      for col in range(n_cols):
+         for row in range(n_rows):            
+            # place each tile onto the game grid
+            if compact_matrix[row][col] is not None:
+               # compute the position of the tile on the game grid
+               pos = Point()
+               pos.x = blc_position.x + col
+               pos.y = blc_position.y + (n_rows - 1) - row
+               if not game_grid.is_inside(pos.y, pos.x):
+                  return False
+               if game_grid.tile_matrix[pos.y][pos.x] is not None:
+                  return False
+      return True
+   
+   # A method for rotating this tetromino clockwise by 90 degrees
+   def rotate_clockwise(self, game_grid):
+      # rotate the tile matrix of this tetromino clockwise by 90 degrees
+      self.tile_matrix = np.rot90(self.tile_matrix, -1)
+       # check if the tetromino can be rotated or not
+      if not self.can_be_rotated(game_grid):
+         # if the tetromino cannot be rotated, rotate it back to its original
+         # position by rotating it counter-clockwise by 90 degrees
+         self.tile_matrix = np.rot90(self.tile_matrix, 1)
+         return False
+      # otherwise return True to indicate a successful rotation
+      return True
+
+   # A method for rotating this tetromino counter-clockwise by 90 degrees
+   def rotate_counter_clockwise(self, game_grid):
+      # rotate the tile matrix of this tetromino counter-clockwise by 90 degrees
+      self.tile_matrix = np.rot90(self.tile_matrix, 1)
+      # check if the tetromino can be rotated or not
+      if not self.can_be_rotated(game_grid):
+         # if the tetromino cannot be rotated, rotate it back to its original
+         # position by rotating it clockwise by 90 degrees
+         self.tile_matrix = np.rot90(self.tile_matrix, -1)
+         return False
+      # otherwise return True to indicate a successful rotation
+      return True
+

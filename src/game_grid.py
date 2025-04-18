@@ -24,6 +24,8 @@ class GameGrid:
       # thickness values used for the grid lines and the grid boundaries
       self.line_thickness = 0.006
       self.box_thickness = 0.010
+      # score counter
+      self.score = 0
 
    # A method for displaying the game grid
    def display(self):
@@ -37,6 +39,10 @@ class GameGrid:
          self.current_tetromino.draw()
       # draw a box around the game grid
       self.draw_boundaries()
+      #! Score for testing purposes for merge
+      stddraw.setFontSize(20)
+      stddraw.setPenColor(color.BLACK)
+      stddraw.text(0.8, self.grid_height - 1, f"SCORE: {self.score}")
       # show the resulting drawing with a pause duration = 250 ms
       stddraw.show(250)
 
@@ -91,6 +97,76 @@ class GameGrid:
       if col < 0 or col >= self.grid_width:
          return False
       return True
+   
+   # Mergin tiles
+   def merge_tiles(self):
+      gained = 0
+      H, W = self.grid_height, self.grid_width
+      for col in range(W):
+         row = 0
+         while row < H - 1:
+            bot = self.tile_matrix[row][col]
+            top = self.tile_matrix[row+1][col]
+            if bot and top and bot.number == top.number:
+               bot.number *= 2
+               bot.update_color()
+               gained += bot.number
+               # remove the above tile and collapse
+               self.tile_matrix[row+1][col] = None
+               for rr in range(row+2, H):
+                  self.tile_matrix[rr-1][col] = self.tile_matrix[rr][col]
+                  self.tile_matrix[H-1][col] = None
+            else:
+               row += 1
+      self.score += gained
+      return gained
+
+   # Clearing full rows
+   def clear_full_rows(self):
+      # remove any completely filled rows, shift above down
+      gained = 0
+      H, W = self.grid_height, self.grid_width
+      new_rows = []
+      for r in range(H):
+         row = self.tile_matrix[r]
+         if all(cell is not None for cell in row):
+            for cell in row:
+               gained += cell.number
+         else:
+            new_rows.append(row)
+      # add empty rows at top
+      for _ in range(H - len(new_rows)):
+         new_rows.insert(0, [None]*W)
+      self.tile_matrix = np.array(new_rows)
+      self.score += gained
+      return gained
+
+   # Handling free tiles (deleting free tiles)
+   def handle_free_tiles(self):
+      H, W = self.grid_height, self.grid_width
+      # flood‑fill from bottom row
+      visited = [[False]*W for _ in range(H)]
+      stack = []
+      for c in range(W):
+         if self.tile_matrix[0][c]:
+            visited[0][c] = True
+            stack.append((0, c))
+         while stack:
+            r, c = stack.pop()
+            for dr, dc in ((1,0),(-1,0),(0,1),(0,-1)):
+               rr, cc = r+dr, c+dc
+               if 0 <= rr < H and 0 <= cc < W and not visited[rr][cc] and self.tile_matrix[rr][cc]:
+                  visited[rr][cc] = True
+                  stack.append((rr, cc))
+      # remove unvisited (free) tiles
+      gained = 0
+      for r in range(H):
+         for c in range(W):
+            if self.tile_matrix[r][c] and not visited[r][c]:
+               gained += self.tile_matrix[r][c].number
+               self.tile_matrix[r][c] = None
+      self.score += gained
+      return gained
 
    # A method that locks the tiles of a landed tetromino on the grid checking
    # if the game is over due to having any tile above the topmost grid row.

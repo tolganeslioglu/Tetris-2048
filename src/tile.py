@@ -13,15 +13,18 @@ class Tile:
    # A constructor that creates a tile with 2 as the number on it
    def __init__(self, number=2):
       self.number = number
-      
+      # set color based on number
+      self.update_color()
+
+   def update_color(self):
       # Determine the foreground (number) color
-      if number in (2, 4):
+      if self.number in (2, 4):
          self.foreground_color = color.BOUNDRY_COLOR
       else:
          self.foreground_color = color.WHITE
 
       # Determine the background color
-      background_color_name = "TILE_" + str(number)
+      background_color_name = f"TILE_{self.number}"
       try:
          self.background_color = getattr(color, background_color_name)
       except AttributeError:
