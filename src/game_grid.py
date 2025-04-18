@@ -109,6 +109,7 @@ class GameGrid:
             top = self.tile_matrix[row+1][col]
             if bot and top and bot.number == top.number:
                bot.number *= 2
+               bot.update_color()
                gained += bot.number
                # remove the above tile and collapse
                self.tile_matrix[row+1][col] = None
