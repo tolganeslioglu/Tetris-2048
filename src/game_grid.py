@@ -26,6 +26,8 @@ class GameGrid:
       self.box_thickness = 0.010
       # score counter
       self.score = 0
+      # game speed in milliseconds (modifiable via difficulty selector)
+      self.game_speed = 100
 
    # A method for displaying the game grid
    def display(self):
@@ -43,8 +45,8 @@ class GameGrid:
       stddraw.setFontSize(20)
       stddraw.setPenColor(color.BLACK)
       stddraw.text(0.8, self.grid_height - 1, f"SCORE: {self.score}")
-      # show the resulting drawing with a pause duration = 250 ms
-      stddraw.show(250)
+      # show the resulting drawing with a pause duration = game_speed
+      stddraw.show(self.game_speed)
 
    # A method for drawing the cells and the lines of the game grid
    def draw_grid(self):

@@ -26,8 +26,10 @@ def start():
    # set the game grid dimension values stored and used in the Tetromino class
    Tetromino.grid_height = grid_h
    Tetromino.grid_width = grid_w
-   # create the game grid
+   # create the game grid and choose speed via merged menu
    grid = GameGrid(grid_h, grid_w)
+   selected_speed = display_game_menu(grid_h, grid_w)
+   grid.game_speed = selected_speed
    # create the first tetromino to enter the game grid
    # by using the create_tetromino function defined below
    current_tetromino = create_tetromino()
@@ -35,7 +37,7 @@ def start():
 
    # display a simple menu before opening the game
    # by using the display_game_menu function defined below
-   display_game_menu(grid_h, grid_w)
+   # display_game_menu(grid_h, grid_w)
 
    # the main game loop
    while True:
@@ -112,48 +114,78 @@ def create_tetromino():
 
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
-   # the colors used for the menu
-   background_color = Color(42, 69, 99)
-   button_color = Color(25, 255, 228)
-   text_color = Color(31, 160, 239)
-   # clear the background drawing canvas to background_color
-   stddraw.clear(background_color)
-   # get the directory in which this python code file is placed
-   current_dir = os.path.dirname(os.path.realpath(__file__))
-   # compute the path of the image file
-   img_file = current_dir + "/images/menu_image.png"
-   # the coordinates to display the image centered horizontally
-   img_center_x, img_center_y = (grid_width - 1) / 2, grid_height - 7
-   # the image is modeled by using the Picture class
-   image_to_display = Picture(img_file)
-   # add the image to the drawing canvas
-   stddraw.picture(image_to_display, img_center_x, img_center_y)
-   # the dimensions for the start game button
-   button_w, button_h = grid_width - 1.5, 2
-   # the coordinates of the bottom left corner for the start game button
-   button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
-   # add the start game button as a filled rectangle
-   stddraw.setPenColor(button_color)
-   stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
-   # add the text on the start game button
-   stddraw.setFontFamily("Arial")
-   stddraw.setFontSize(25)
-   stddraw.setPenColor(text_color)
-   text_to_display = "Click Here to Start the Game"
-   stddraw.text(img_center_x, 5, text_to_display)
-   # the user interaction loop for the simple menu
-   while True:
-      # display the menu and wait for a short time (50 ms)
-      stddraw.show(50)
-      # check if the mouse has been left-clicked on the start game button
-      if stddraw.mousePressed():
-         # get the coordinates of the most recent location at which the mouse
-         # has been left-clicked
-         mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
-         # check if these coordinates are inside the button
-         if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
-            if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
-               break  # break the loop to end the method and start the game
+    # colors used for the menu
+    background_color = Color(42, 69, 99)
+    button_color = Color(25, 255, 228)
+    text_color = Color(31, 160, 239)
+    # difficulty button setup
+    btn_w, btn_h = 2.0, 1.0
+    # center group of buttons on screen
+    center_x = (grid_width - 1) / 2
+    spacing = btn_w * 1.5
+    centers = [center_x - spacing, center_x, center_x + spacing]
+    labels = ["Easy", "Medium", "Hard"]
+    speeds = [150, 100, 50]
+    selected_speed = None
+
+    # compute image placement
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    img_file = current_dir + "/images/menu_image.png"
+    image_to_display = Picture(img_file)
+    img_center_x, img_center_y = (grid_width - 1) / 2, grid_height - 7
+
+    # vertical position for difficulty buttons: shifted down a bit
+    btn_center_y = grid_height / 2 - 2
+    # layout for start button
+    start_w, start_h = grid_width - 1.5, 2
+    start_x = img_center_x - start_w / 2
+    start_y = 4
+    start_text_y = 5
+
+    while True:
+        stddraw.clear(background_color)
+        # draw the image
+        stddraw.picture(image_to_display, img_center_x, img_center_y)
+
+        # draw difficulty buttons
+        stddraw.setFontFamily("Arial")
+        stddraw.setFontSize(20)
+        for i, x in enumerate(centers):
+            # button background
+            stddraw.setPenColor(button_color)
+            stddraw.filledRectangle(x - btn_w/2,
+                                    btn_center_y - btn_h/2,
+                                    btn_w, btn_h)
+            # outline if selected
+            if selected_speed == speeds[i]:
+                stddraw.setPenColor(text_color)
+                stddraw.rectangle(x - btn_w/2,
+                                  btn_center_y - btn_h/2,
+                                  btn_w, btn_h)
+            # label
+            stddraw.setPenColor(text_color)
+            stddraw.text(x, btn_center_y, labels[i])
+
+        # draw start button
+        stddraw.setPenColor(button_color)
+        stddraw.filledRectangle(start_x, start_y, start_w, start_h)
+        stddraw.setFontSize(25)
+        stddraw.setPenColor(text_color)
+        stddraw.text(img_center_x, start_text_y, "Click Here to Start the Game")
+
+        stddraw.show(50)
+        if stddraw.mousePressed():
+            mx, my = stddraw.mouseX(), stddraw.mouseY()
+            # check difficulty clicks
+            for i, x in enumerate(centers):
+                if (x - btn_w/2) <= mx <= (x + btn_w/2) and \
+                   (btn_center_y - btn_h/2) <= my <= (btn_center_y + btn_h/2):
+                    selected_speed = speeds[i]
+            # check start click
+            if mx >= start_x and mx <= start_x + start_w and \
+               my >= start_y and my <= start_y + start_h and \
+               selected_speed is not None:
+                return selected_speed
 
 
 # start() function is specified as the entry point (main function) from which
