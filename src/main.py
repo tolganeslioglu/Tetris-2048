@@ -141,39 +141,40 @@ def display_game_over(grid_height, grid_width, current_score):
    
    stddraw.clear(background_color)
    
-   center_x = (grid_width - 1) / 2
-   top_y = grid_height - 4  # Başlık için üst kısım
+   canvas_total_width = grid_width + (grid_width / 3)
+   center_x = (canvas_total_width - 1) / 2
+   top_y = grid_height - 4
 
    # --- Game Over Başlığı ---
    stddraw.setFontSize(60)
    stddraw.setPenColor(button_color)
-   stddraw.boldText(center_x, top_y, "Game Over")
+   stddraw.boldText(center_x - 5, top_y, "Game Over")
 
    # --- Skorlar ---
    stddraw.setFontSize(30)
    score_y = top_y - 3
-   stddraw.text(center_x, score_y, f"Score: {current_score}")
-   stddraw.text(center_x, score_y - 1.5, f"High Score: {load_high_score(current_score)}")
+   stddraw.text(center_x - 5, score_y, f"Score: {current_score}")
+   stddraw.text(center_x - 5, score_y - 1.5, f"High Score: {load_high_score(current_score)}")
 
    # --- Restart Butonu ---
-   button_w, button_h = 8, 2
-   button_y = score_y - 5  # Skordan sonra boşluk bırak
+   button_w, button_h = canvas_total_width / 3, 2
+   button_y = score_y - 5
    button_blc_x = center_x - button_w / 2
    
    stddraw.setPenColor(button_color)
-   stddraw.filledRectangle(button_blc_x, button_y, button_w, button_h)
+   stddraw.filledRectangle(button_blc_x - 5, button_y, button_w, button_h)
    
    stddraw.setFontSize(35)
    stddraw.setPenColor(text_color)
-   stddraw.text(center_x, button_y + button_h / 2, "Restart")
+   stddraw.text(center_x - 5, button_y + button_h / 2, "Restart")
 
-   # --- Click Kontrol ---
    while True:
       stddraw.show(50)
       if stddraw.mousePressed():
          mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
          if button_blc_x <= mouse_x <= button_blc_x + button_w and button_y <= mouse_y <= button_y + button_h:
             return True
+
 
 # High score işlemi ayrı fonksiyonda daha temiz olur
 def load_high_score(current_score):
