@@ -83,19 +83,10 @@ def start():
          stddraw.clearKeysTyped()
 
       if reset:
-         grid.reset_scene()  # Reset the game grid
-         # create the first tetromino to enter the game grid
-         grid.current_tetromino = create_tetromino()
-         grid.next_tetromino = create_tetromino()
-         grid.current_tetromino = grid.current_tetromino
-
-         # display a simple menu before opening the game
-         # by using the display_game_menu function defined below
+         do_reset(grid)  # Reset the game grid
          display_game_menu(grid_h, grid_w)
-         # clear the queue of the pressed keys for a smoother interaction
-         stddraw.clearKeysTyped()  # clear the queue of the pressed keys for a smoother interaction
-         reset = False  # Reset flag to False after restarting
-
+         reset = False
+         continue
       else:
          # move the active tetromino down by one at each iteration (auto fall)
          success = grid.current_tetromino.move("down", grid)
@@ -110,17 +101,28 @@ def start():
             if game_over:
                grid.game_over = True
                # display the game over screen by using the display_game_over function defined below
-               display_game_over(grid_w, grid_h, grid.score)
-               break      
+               reset = display_game_over(grid_w, grid_h, grid.score)
+               if reset:
+                  do_reset(grid)  # Reset the game grid
+                  display_game_menu(grid_h, grid_w)  # Display the game menu again
+                  reset = False  # Reset the flag to False
+                  continue  # Restart the game      
             # create the next tetromino to enter the game grid
             # by using the create_tetromino function defined below
-            grid.current_tetromino = create_tetromino()
+            grid.current_tetromino = grid.next_tetromino
             grid.next_tetromino = create_tetromino()
-            grid.current_tetromino = grid.current_tetromino
 
       # display the game grid with the current tetromino
       grid.display()
 
+def do_reset(grid):
+   grid.reset_scene()  # Reset the game grid
+   # create the first tetromino to enter the game grid
+   grid.current_tetromino = create_tetromino()
+   grid.next_tetromino = create_tetromino()
+
+   # clear the queue of the pressed keys for a smoother interaction
+   stddraw.clearKeysTyped()  # clear the queue of the pressed keys for a smoother interaction
 
 # A function for creating random shaped tetrominoes to enter the game grid
 def create_tetromino():
@@ -133,74 +135,67 @@ def create_tetromino():
    return tetromino
 
 def display_game_over(grid_height, grid_width, current_score):
-   # colors used for the menu
    background_color = Color(238, 228, 218)
    button_color = Color(119, 110, 101)
    text_color = Color(238, 228, 218)
-   # clear the background canvas to background_color
-   stddraw.clear(background_color)
-   # center coordinates to display the image
-   img_center_x, img_center_y = (grid_width - 1) / 2, grid_height - 7
-   # dimensions of the start game button
-   button_w, button_h = grid_width - 8, 2
-   # coordinates of the bottom left corner of the start game button 
-   button_blc_x, button_blc_y = img_center_x - button_w / 2, 6
-   # display the start game button as a filled rectangle
-   stddraw.setPenColor(button_color)
-   stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
-   # display the text on the start game button
-   stddraw.setFontFamily("Aharoni")
-   stddraw.setFontSize(40)
-   stddraw.setPenColor(text_color)
-   text_to_display = "Restart"
-   stddraw.text(img_center_x, 7, text_to_display)
-   text_to_show = "Game Over"
-   stddraw.setPenColor(button_color)
-   stddraw.setFontSize(72)
-   stddraw.text(img_center_x, grid_height*3//4 - 1, text_to_show)
-   stddraw.setFontSize(24)
    
-   # check if highscore.txt exists, if not create it
+   stddraw.clear(background_color)
+   
+   center_x = (grid_width - 1) / 2
+   top_y = grid_height - 4  # Başlık için üst kısım
+
+   # --- Game Over Başlığı ---
+   stddraw.setFontSize(60)
+   stddraw.setPenColor(button_color)
+   stddraw.boldText(center_x, top_y, "Game Over")
+
+   # --- Skorlar ---
+   stddraw.setFontSize(30)
+   score_y = top_y - 3
+   stddraw.text(center_x, score_y, f"Score: {current_score}")
+   stddraw.text(center_x, score_y - 1.5, f"High Score: {load_high_score(current_score)}")
+
+   # --- Restart Butonu ---
+   button_w, button_h = 8, 2
+   button_y = score_y - 5  # Skordan sonra boşluk bırak
+   button_blc_x = center_x - button_w / 2
+   
+   stddraw.setPenColor(button_color)
+   stddraw.filledRectangle(button_blc_x, button_y, button_w, button_h)
+   
+   stddraw.setFontSize(35)
+   stddraw.setPenColor(text_color)
+   stddraw.text(center_x, button_y + button_h / 2, "Restart")
+
+   # --- Click Kontrol ---
+   while True:
+      stddraw.show(50)
+      if stddraw.mousePressed():
+         mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+         if button_blc_x <= mouse_x <= button_blc_x + button_w and button_y <= mouse_y <= button_y + button_h:
+            return True
+
+# High score işlemi ayrı fonksiyonda daha temiz olur
+def load_high_score(current_score):
    if not os.path.exists("highscore.txt"):
       with open("highscore.txt", "w") as f:
          f.write("0")
-   # read the highscore from the file
    with open("highscore.txt", "r") as f:
       highscore = int(f.read())
-
-   # check if the current score is greater than the highscore
    if current_score > highscore:
       with open("highscore.txt", "w") as f:
-            # update the highscore
-            highscore = current_score
-            # write the new highscore to the file
-            f.write(str(highscore))
-   stddraw.setFontSize(36)
-   stddraw.text(img_center_x, grid_height*3//4 - 3.5, "Score: " + str(current_score))
-   stddraw.text(img_center_x, grid_height*3//4 - 4.5, "High Score: " + str(highscore))
-   # menu interaction loop
-   while True:
-      # display the menu and wait for a short time (50 ms)
-      stddraw.show(50)
-      # check if the mouse has been left-clicked on the button
-      if stddraw.mousePressed():
-         # get the x and y coordinates of the location at which the mouse has 
-         # most recently been left-clicked  
-         mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
-         # check if these coordinates are inside the button
-         if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
-            if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h: 
-               reset = True
-               break # break the loop to end the method and start the game
-   return True
+         f.write(str(current_score))
+      return current_score
+   return highscore
+
 
 
 def display_pause_menu(grid_height, grid_width):
     
     # Colors for pause menu
-    background_color = Color(30, 30, 30)
-    button_color = Color(200, 200, 200)
-    text_color = Color(50, 50, 50)
+    background_color = Color(238, 228, 218)
+    button_color = Color(119, 110, 101)
+    text_color = Color(238, 228, 218)
 
     # Clear screen with background color
     stddraw.clear(background_color)
@@ -211,7 +206,7 @@ def display_pause_menu(grid_height, grid_width):
 
     # Draw "Paused" text
     stddraw.setFontSize(40)
-    stddraw.setPenColor(Color(255, 0, 0))
+    stddraw.setPenColor(Color(242, 177, 121))
     stddraw.boldText(center_x-5, center_y + 4, "PAUSED")
 
     # Button dimensions

@@ -67,10 +67,14 @@ class GameGrid:
       stddraw.boldText(panel_center_x-1, self.grid_height - 7.2, "NEXT")
 
       # === Draw next piece right under "NEXT" ===
-      next_tetromino.bottom_left_cell = Point()
-      next_tetromino.bottom_left_cell.x = int(panel_center_x) - 1
-      next_tetromino.bottom_left_cell.y = int(self.grid_height - 11)
-      next_tetromino.draw(next_display=True)
+      temp_tetromino = copy.deepcopy(next_tetromino)
+
+      tetromino_width = len(temp_tetromino.tile_matrix[0])
+
+      temp_tetromino.bottom_left_cell = Point()
+      temp_tetromino.bottom_left_cell.x = int(panel_center_x) - tetromino_width // 2
+      temp_tetromino.bottom_left_cell.y = int(self.grid_height - 11)
+      temp_tetromino.draw(next_display=True)
 
    # A method for displaying the game grid
    def display(self):
