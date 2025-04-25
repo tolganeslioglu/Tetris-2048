@@ -35,68 +35,60 @@ def start():
    current_tetromino = create_tetromino()
    grid.current_tetromino = current_tetromino
 
-   # display a simple menu before opening the game
-   # by using the display_game_menu function defined below
-   # display_game_menu(grid_h, grid_w)
+   # initialize pause state
+   paused = False
 
    # the main game loop
    while True:
-      # check for any user interaction via the keyboard
-      if stddraw.hasNextKeyTyped():  # check if the user has pressed a key
-         key_typed = stddraw.nextKeyTyped()  # the most recently pressed key
-         # if the left arrow key has been pressed
-         if key_typed == "left":
-            # move the active tetromino left by one
-            current_tetromino.move(key_typed, grid)
-         # if the right arrow key has been pressed
-         elif key_typed == "right":
-            # move the active tetromino right by one
-            current_tetromino.move(key_typed, grid)
-         # if the down arrow key has been pressed
-         elif key_typed == "down":
-            # move the active tetromino down by one
-            # (soft drop: causes the tetromino to fall down faster)
-            current_tetromino.move(key_typed, grid)
-         
-         elif key_typed == "C" or key_typed == "c":   
-            # rotate the active tetromino clockwise
-            current_tetromino.rotate_clockwise(grid) 
-
-         elif key_typed == "Z" or key_typed == "z":
-            # rotate the active tetromino counterclockwise
-            current_tetromino.rotate_counter_clockwise(grid)
-         
-         elif key_typed == "space":
-            # hard drop: move the active tetromino down until it lands
-            while current_tetromino.move("down", grid):
-                pass
-         # clear the queue of the pressed keys for a smoother interaction
+      # input handling (including pause toggle)
+      if stddraw.hasNextKeyTyped():
+         key_typed = stddraw.nextKeyTyped()
+         if key_typed == 'escape':
+            paused = not paused
+            stddraw.clearKeysTyped()
+            continue
+         if not paused:
+            # original key-driven moves
+            if key_typed == 'left':
+               current_tetromino.move(key_typed, grid)
+            elif key_typed == 'right':
+               current_tetromino.move(key_typed, grid)
+            elif key_typed == 'down':
+               current_tetromino.move(key_typed, grid)
+            elif key_typed in ('C','c'):
+               current_tetromino.rotate_clockwise(grid)
+            elif key_typed in ('Z','z'):
+               current_tetromino.rotate_counter_clockwise(grid)
+            elif key_typed == 'space':
+               while current_tetromino.move('down', grid):
+                  pass
          stddraw.clearKeysTyped()
 
-      # move the active tetromino down by one at each iteration (auto fall)
-      success = current_tetromino.move("down", grid)
-      # lock the active tetromino onto the grid when it cannot go down anymore
+      # if paused, show PAUSED text and skip updates
+      if paused:
+         stddraw.setFontSize(40)
+         stddraw.setPenColor(Color(0, 0, 0))
+         # center paused text on screen
+         center_x = (grid_w - 1) / 2
+         center_y = (grid_h - 1) / 2
+         stddraw.text(center_x, center_y, 'PAUSED')
+         stddraw.show(100)
+         continue
+
+      # auto-fall and locking logic
+      success = current_tetromino.move('down', grid)
       if not success:
-         # get the tile matrix of the tetromino without empty rows and columns
-         # and the position of the bottom left cell in this matrix
          tiles, pos = current_tetromino.get_min_bounded_tile_matrix(True)
-         # update the game grid by locking the tiles of the landed tetromino
          game_over = grid.update_grid(tiles, pos)
-         # end the main game loop if the game is over
          if game_over:
             break
-         
-         # Merging and Clearing and Free Tiles
          grid.merge_tiles()
          grid.clear_full_rows()
          grid.handle_free_tiles()
-
-         # create the next tetromino to enter the game grid
-         # by using the create_tetromino function defined below
          current_tetromino = create_tetromino()
          grid.current_tetromino = current_tetromino
 
-      # display the game grid with the current tetromino
+      # render the grid
       grid.display()
 
    # print a message on the console when the game is over
