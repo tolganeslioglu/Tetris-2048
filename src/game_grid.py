@@ -77,6 +77,7 @@ class GameGrid:
       temp_tetromino.draw(next_display=True)
 
       # High score label
+      stddraw.setPenColor(color.WHITE)
       stddraw.setFontSize(16)
       stddraw.boldText(panel_center_x-1, self.grid_height - 12.5, "HIGH SCORE")
       # High score value
