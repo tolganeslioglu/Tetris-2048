@@ -62,6 +62,16 @@ class GameGrid:
       stddraw.setFontSize(18)
       stddraw.boldText(panel_center_x, self.grid_height - 3.5, str(score))
 
+      # High score label
+      stddraw.setPenColor(color.WHITE)
+      stddraw.setFontSize(16)
+      stddraw.boldText(panel_center_x-0.5, self.grid_height - 12.5, "HIGHSCORE")
+
+      # High score value 
+      stddraw.setFontSize(18)
+      high_score = self.load_high_score(score)
+      stddraw.boldText(panel_center_x, self.grid_height - 13.8, str(score))
+
       # === NEXT Tetromino Label ===
       stddraw.setFontSize(16)
       stddraw.boldText(panel_center_x-1, self.grid_height - 7.2, "NEXT")
@@ -75,15 +85,6 @@ class GameGrid:
       temp_tetromino.bottom_left_cell.x = int(panel_center_x) - tetromino_width // 2
       temp_tetromino.bottom_left_cell.y = int(self.grid_height - 11)
       temp_tetromino.draw(next_display=True)
-
-      # High score label
-      stddraw.setPenColor(color.WHITE)
-      stddraw.setFontSize(16)
-      stddraw.boldText(panel_center_x-1, self.grid_height - 12.5, "HIGH SCORE")
-      # High score value
-      stddraw.setFontSize(18)
-      high_score = self.load_high_score(score)
-      stddraw.text(panel_center_x-0.5, self.grid_height - 13.8, str(high_score))
 
    # High score işlemi 
    def load_high_score(self, current_score):
