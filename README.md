@@ -2,7 +2,7 @@
 Merge, place, and reach 2048!
 This project is a unique combination of the classic Tetris and the popular 2048 game.
 
-## 🚀 Özellikler
+## 🚀 Features
 Tetris + 2048 Mechanics
 Place falling blocks and merge identical numbers to score points!
 
