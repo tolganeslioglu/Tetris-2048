@@ -1,3 +1,4 @@
+import copy
 import lib.stddraw as stddraw  # used for displaying the game grid
 from point import Point  # used for tile positions
 import numpy as np  # fundamental Python module for scientific computing
@@ -29,6 +30,56 @@ class GameGrid:
       # game speed in milliseconds (modifiable via difficulty selector)
       self.game_speed = 100
 
+      self.next_tetromino = None  # the next tetromino to enter the game grid
+      self.prediction_tetromino = None
+
+      self.score = 0  # the score of the game
+
+      
+   # Method used for resetting the game environment
+   def reset_scene(self):
+      self.tile_matrix = np.full((self.grid_height, self.grid_width), None)
+      self.current_tetromino = None
+      self.display_tetromino = None
+      temp_score = self.score
+      self.score = 0
+      self.game_over = False
+      return temp_score
+
+   def predict(self):
+      self.prediction_tetromino = copy.deepcopy(self.current_tetromino)
+      while self.prediction_tetromino.can_be_moved("down", self):
+         self.prediction_tetromino.move("down", self)
+      self.prediction_tetromino.draw(pred = True)
+
+   def draw_score_and_next(self, score, next_tetromino):
+      panel_start_x = self.grid_width
+      panel_width = self.grid_width / 3
+      panel_center_x = panel_start_x + panel_width / 2
+
+      # Draw score label
+      stddraw.setPenColor(color.WHITE)
+      stddraw.setFontSize(16)
+      stddraw.boldText(panel_center_x-1, self.grid_height - 2, "SCORE")
+
+      # Draw score value
+      stddraw.setFontSize(18)
+      stddraw.boldText(panel_center_x, self.grid_height - 3.5, str(score))
+
+      # === NEXT Tetromino Label ===
+      stddraw.setFontSize(16)
+      stddraw.boldText(panel_center_x-1, self.grid_height - 7.2, "NEXT")
+
+      # === Draw next piece right under "NEXT" ===
+      temp_tetromino = copy.deepcopy(next_tetromino)
+
+      tetromino_width = len(temp_tetromino.tile_matrix[0])
+
+      temp_tetromino.bottom_left_cell = Point()
+      temp_tetromino.bottom_left_cell.x = int(panel_center_x) - tetromino_width // 2
+      temp_tetromino.bottom_left_cell.y = int(self.grid_height - 11)
+      temp_tetromino.draw(next_display=True)
+
    # A method for displaying the game grid
    def display(self):
       # clear the background to empty_cell_color
@@ -38,7 +89,13 @@ class GameGrid:
       # draw the current/active tetromino if it is not None
       # (the case when the game grid is updated)
       if self.current_tetromino is not None:
+         self.predict()
          self.current_tetromino.draw()
+
+      # draw the next tetromino and score
+      if self.next_tetromino is not None and self.score is not None:
+         self.draw_score_and_next(self.score, self.next_tetromino)
+
       # draw a box around the game grid
       self.draw_boundaries()
       #! Score for testing purposes for merge
