@@ -82,9 +82,21 @@ def start():
          game_over = grid.update_grid(tiles, pos)
          if game_over:
             break
-         grid.merge_tiles()
-         grid.clear_full_rows()
-         grid.handle_free_tiles()
+         MERGE_ANIM_DELAY = 150 # how long (in ms) to show each merge / cleared phase
+         while True: # The Game Loop
+            merged  = grid.merge_tiles()
+            cleared = grid.clear_full_rows()
+            freed   = grid.handle_free_tiles()
+            # draw this intermediate state with a short pause
+            if merged or cleared or freed:
+               # take the max out of delay and the game
+               delay_speed = max(MERGE_ANIM_DELAY, grid.game_speed)
+               old_speed = grid.game_speed
+               grid.game_speed = delay_speed
+               grid.display()
+               grid.game_speed = old_speed
+            else:
+               break
          current_tetromino = create_tetromino()
          grid.current_tetromino = current_tetromino
 
