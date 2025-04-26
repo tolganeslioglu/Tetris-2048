@@ -21,7 +21,7 @@ Pause the game anytime and continue where you left off.
 
 ## 📸 Screenshots
 
-###🎬 Main Menu
+### 🎬 Main Menu
 
 ![image](https://github.com/user-attachments/assets/3b582668-58c1-42da-9be5-5d5cf199ed9f)
 
