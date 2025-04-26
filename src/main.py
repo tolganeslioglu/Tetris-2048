@@ -82,9 +82,21 @@ def start():
          game_over = grid.update_grid(tiles, pos)
          if game_over:
             break
-         grid.merge_tiles()
-         grid.clear_full_rows()
-         grid.handle_free_tiles()
+         MERGE_ANIM_DELAY = 150 # how long (in ms) to show each merge / cleared phase
+         while True: # The Game Loop
+            merged  = grid.merge_tiles()
+            cleared = grid.clear_full_rows()
+            freed   = grid.handle_free_tiles()
+            # draw this intermediate state with a short pause
+            if merged or cleared or freed:
+               # take the max out of delay and the game
+               delay_speed = max(MERGE_ANIM_DELAY, grid.game_speed)
+               old_speed = grid.game_speed
+               grid.game_speed = delay_speed
+               grid.display()
+               grid.game_speed = old_speed
+            else:
+               break
          current_tetromino = create_tetromino()
          grid.current_tetromino = current_tetromino
 
@@ -107,9 +119,9 @@ def create_tetromino():
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
     # colors used for the menu
-    background_color = Color(42, 69, 99)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
+    background_color = Color(232,223,213)
+    button_color = Color(237,194,46)
+    text_color = Color(249,246,242)
     # difficulty button setup
     btn_w, btn_h = 2.0, 1.0
     # center group of buttons on screen
