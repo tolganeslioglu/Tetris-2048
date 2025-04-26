@@ -11,9 +11,21 @@ import os  # the os module is used for file and directory operations
 from game_grid import GameGrid  # the class for modeling the game grid
 from tetromino import Tetromino  # the class for modeling the tetrominoes
 import random  # used for creating tetrominoes with random types (shapes)
+# sound lib
+import vlc
 
 # The main function where this program starts execution
 def start():
+   # —— Background music (MP3) via VLC ——
+   base_dir   = os.path.dirname(os.path.abspath(__file__))
+   music_path = os.path.join(base_dir, "music", "main_music.mp3")
+   player     = vlc.MediaPlayer(music_path)
+   player.audio_set_volume(50)  # adjust 0–100 to taste
+   player.play()
+   # When the track ends, restart it
+   ev = player.event_manager()
+   ev.event_attach(vlc.EventType.MediaPlayerEndReached, lambda e: player.play())
+
    # set the dimensions of the game grid
    grid_h, grid_w = 20, 12
    # set the size of the drawing canvas (the displayed window)
@@ -143,7 +155,7 @@ def create_tetromino():
    return tetromino
 
 def check_win_condition(current_score):
-    return current_score >= 10
+    return current_score >= 2048
 
 
 def display_win_screen(grid_height, grid_width, current_score, grid):
