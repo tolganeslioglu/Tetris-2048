@@ -43,16 +43,17 @@ Reach the 2048 block and you'll be greeted with this special screen!
 Need a break? Press **P** anytime to pause the game.  
 Resume or restart whenever you're ready!
 
-![WhatsApp Image 2025-04-26 at 14 51 30_9f77589f](https://github.com/user-attachments/assets/889ee53a-dbb0-4ba9-9ef1-b3aa0f84c264)
+![pause](https://github.com/user-attachments/assets/18479f72-28c7-463c-8acf-6424244460f1)
 
+### 🎮 How to Play?
 
-### 🎮 How to Play
+| Key   | Action               |
+|-------|----------------------|
+| ⬅️    | Move Left            |
+| ➡️    | Move Right           |
+| ⬇️    | Soft Drop            |
+| `C`   | Rotate Clockwise     |
+| `Z`   | Rotate Counterclockwise |
+| `P`   | Pause                |
+| Space | Hard Drop            |
 
-Key | Action
-⬅️ | Move Left
-➡️ | Move Right
-⬇️ | Soft Drop
-C | Rotate Clockwise
-Z | Rotate Counterclockwise
-P | Pause
-Space | Hard Drop
