@@ -18,9 +18,11 @@ Reach the 2048 block and get rewarded with a special "You Win!" screen.
 Pause & Resume:
 Pause the game anytime and continue where you left off.
 
+
 📸 Screenshots
 🎬 Main Menu
 ![image](https://github.com/user-attachments/assets/3b582668-58c1-42da-9be5-5d5cf199ed9f)
+
 
 🕹️ Game Screen
 Merge the blocks and increase your score!
