@@ -1,3 +1,4 @@
+import os
 import lib.stddraw as stddraw  # used for displaying the game grid
 from point import Point  # used for tile positions
 import numpy as np  # fundamental Python module for scientific computing
@@ -75,6 +76,27 @@ class GameGrid:
       temp_tetromino.bottom_left_cell.y = int(self.grid_height - 11)
       temp_tetromino.draw(next_display=True)
 
+      # High score label
+      stddraw.setFontSize(16)
+      stddraw.boldText(panel_center_x-1, self.grid_height - 12.5, "HIGH SCORE")
+      # High score value
+      stddraw.setFontSize(18)
+      high_score = self.load_high_score(score)
+      stddraw.text(panel_center_x-0.5, self.grid_height - 13.8, str(high_score))
+
+   # High score işlemi 
+   def load_high_score(self, current_score):
+      if not os.path.exists("highscore.txt"):
+         with open("highscore.txt", "w") as f:
+            f.write("0")
+      with open("highscore.txt", "r") as f:
+         highscore = int(f.read())
+      if current_score > highscore:
+         with open("highscore.txt", "w") as f:
+            f.write(str(current_score))
+         return current_score
+      return highscore
+   
    # A method for displaying the game grid
    def display(self):
       # clear the background to empty_cell_color

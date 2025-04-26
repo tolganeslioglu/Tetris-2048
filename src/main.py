@@ -81,7 +81,7 @@ def start():
          if game_over:
             grid.game_over = True
             # display the game over screen by using the display_game_over function defined below
-            reset = display_game_over(grid_w, grid_h, grid.score)
+            reset = display_game_over(grid_w, grid_h, grid.score, grid)
             if reset:
                do_reset(grid)  # Reset the game grid
                display_game_menu(grid_h, grid_w)  # Display the game menu again
@@ -128,7 +128,7 @@ def create_tetromino():
    tetromino = Tetromino(random_type)
    return tetromino
 
-def display_game_over(grid_height, grid_width, current_score):
+def display_game_over(grid_height, grid_width, current_score, grid):
    background_color = Color(238, 228, 218)
    button_color = Color(119, 110, 101)
    text_color = Color(238, 228, 218)
@@ -148,7 +148,7 @@ def display_game_over(grid_height, grid_width, current_score):
    stddraw.setFontSize(30)
    score_y = top_y - 3
    stddraw.text(center_x - 5, score_y, f"Score: {current_score}")
-   stddraw.text(center_x - 5, score_y - 1.5, f"High Score: {load_high_score(current_score)}")
+   stddraw.text(center_x - 5, score_y - 1.5, f"High Score: {grid.load_high_score(current_score)}")
 
    # --- Restart Butonu ---
    button_w, button_h = canvas_total_width / 3, 2
@@ -169,18 +169,7 @@ def display_game_over(grid_height, grid_width, current_score):
          if button_blc_x <= mouse_x <= button_blc_x + button_w and button_y <= mouse_y <= button_y + button_h:
             return True
 
-# High score işlemi ayrı fonksiyonda daha temiz olur
-def load_high_score(current_score):
-   if not os.path.exists("highscore.txt"):
-      with open("highscore.txt", "w") as f:
-         f.write("0")
-   with open("highscore.txt", "r") as f:
-      highscore = int(f.read())
-   if current_score > highscore:
-      with open("highscore.txt", "w") as f:
-         f.write(str(current_score))
-      return current_score
-   return highscore
+
 
 def display_pause_menu(grid_height, grid_width):
     
