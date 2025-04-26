@@ -49,42 +49,42 @@ class GameGrid:
       self.prediction_tetromino.draw(pred = True)
 
    def draw_score_and_next(self, score, next_tetromino):
-      panel_start_x = self.grid_width
-      panel_width = self.grid_width / 3
+      # ---- panel centre x (accounting for the –0.5 canvas offset) ----
+      panel_start_x  = self.grid_width - 0.5
+      panel_width    = self.grid_width / 3
       panel_center_x = panel_start_x + panel_width / 2
 
-      # Draw score label
+      # --- SCORE ---
       stddraw.setPenColor(color.WHITE)
       stddraw.setFontSize(16)
-      stddraw.boldText(panel_center_x-1, self.grid_height - 2, "SCORE")
+      stddraw.boldText(panel_center_x, self.grid_height - 2, "SCORE")
 
-      # Draw score value
       stddraw.setFontSize(18)
-      stddraw.boldText(panel_center_x, self.grid_height - 3.5, str(score))
+      stddraw.text(panel_center_x, self.grid_height - 3.5, str(score))
 
-      # High score label
+      # --- NEXT ---
       stddraw.setPenColor(color.WHITE)
       stddraw.setFontSize(16)
-      stddraw.boldText(panel_center_x-0.5, self.grid_height - 12.5, "HIGHSCORE")
+      stddraw.boldText(panel_center_x, self.grid_height - 7.2, "NEXT")
 
-      # High score value 
+      # draw next tetromino, exactly centred under the label
+      temp = copy.deepcopy(next_tetromino)
+      w    = len(temp.tile_matrix[0])
+      offset = (w - 1) / 2
+      temp.bottom_left_cell = Point(
+         panel_center_x - offset,
+         self.grid_height - 11
+      )
+      temp.draw(next_display=True)
+
+      # --- HIGH SCORE ---
+      stddraw.setPenColor(color.WHITE)
+      stddraw.setFontSize(16)
+      stddraw.boldText(panel_center_x, self.grid_height - 12.5, "HIGH SCORE")
+
       stddraw.setFontSize(18)
       high_score = self.load_high_score(score)
-      stddraw.boldText(panel_center_x, self.grid_height - 13.8, str(score))
-
-      # === NEXT Tetromino Label ===
-      stddraw.setFontSize(16)
-      stddraw.boldText(panel_center_x-1, self.grid_height - 7.2, "NEXT")
-
-      # === Draw next piece right under "NEXT" ===
-      temp_tetromino = copy.deepcopy(next_tetromino)
-
-      tetromino_width = len(temp_tetromino.tile_matrix[0])
-
-      temp_tetromino.bottom_left_cell = Point()
-      temp_tetromino.bottom_left_cell.x = int(panel_center_x) - tetromino_width // 2
-      temp_tetromino.bottom_left_cell.y = int(self.grid_height - 11)
-      temp_tetromino.draw(next_display=True)
+      stddraw.text(panel_center_x, self.grid_height - 13.8, str(high_score))
 
    # High score işlemi 
    def load_high_score(self, current_score):
