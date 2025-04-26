@@ -42,7 +42,9 @@ Reach the 2048 block and you'll be greeted with this special screen!
 
 The game is lost if a new tetromino can no longer enter the grid because the tiles have stacked up to the top.
 At that point you will be greeted with:
-![Game Over](<Screenshot 2025-04-26 202225.png>)
+
+![WhatsApp Image 2025-04-26 at 20 26 06_6f9a28ed](https://github.com/user-attachments/assets/91206ed5-27b0-4da2-adc5-92b13e628417)
+
 
 ### ⏸️ Pause Screen  
 
