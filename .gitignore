@@ -11,3 +11,6 @@ env/
 
 # Ignore Visual Studio Code settings
 .vscode/
+
+# Highscore files
+*.txt
