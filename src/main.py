@@ -39,6 +39,8 @@ def start():
    # initialize pause state
    reset = False
 
+   has_won = False
+
    # the main game loop
    while True:
       # input handling (including pause toggle)
@@ -78,6 +80,18 @@ def start():
       if not success:
          tiles, pos = grid.current_tetromino.get_min_bounded_tile_matrix(True)
          game_over = grid.update_grid(tiles, pos)
+         # check if the game is over by using the check_win_condition function defined below
+         if not has_won and check_win_condition(grid.score):
+            # display the win screen by using the display_win_screen function defined below
+            reset = display_win_screen(grid_h, grid_w, grid.score, grid)
+            has_won = True  # Artık tekrar win ekranı gelmez
+
+            if reset:
+               do_reset(grid)
+               display_game_menu(grid_h, grid_w)  # Display the game menu again
+               reset = False  # Reset the flag to False
+               continue  # Restart the game
+
          if game_over:
             grid.game_over = True
             # display the game over screen by using the display_game_over function defined below
@@ -127,6 +141,52 @@ def create_tetromino():
    # create and return the tetromino
    tetromino = Tetromino(random_type)
    return tetromino
+
+def check_win_condition(current_score):
+    return current_score >= 10
+
+
+def display_win_screen(grid_height, grid_width, current_score, grid):
+    background_color = Color(238, 228, 218)
+    button_color = Color(119, 110, 101)
+    text_color = Color(238, 228, 218)
+
+    stddraw.clear(background_color)
+
+    canvas_total_width = grid_width + (grid_width / 3)
+    center_x = canvas_total_width / 2
+    center_y = grid_height / 2
+
+    # --- You Win Başlığı ---
+    stddraw.setFontSize(60)
+    stddraw.setPenColor(button_color)
+    stddraw.boldText(center_x, center_y + 5, "You Win!")
+
+    # --- Skor ---
+    stddraw.setFontSize(30)
+    stddraw.text(center_x, center_y + 2, f"Score: {current_score}")
+    stddraw.text(center_x, center_y, f"High Score: {grid.load_high_score(current_score)}")
+
+    # --- Continue Butonu ---
+    button_w, button_h = 10, 2
+    button_y = center_y - 5
+    button_blc_x = center_x - button_w / 2
+
+    stddraw.setPenColor(button_color)
+    stddraw.filledRectangle(button_blc_x, button_y, button_w, button_h)
+
+    stddraw.setFontSize(30)
+    stddraw.setPenColor(text_color)
+    stddraw.text(center_x, button_y + button_h / 2, "Continue")
+
+    # --- Tıklama Kontrolü ---
+    while True:
+        stddraw.show(50)
+        if stddraw.mousePressed():
+            mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
+            if button_blc_x <= mouse_x <= button_blc_x + button_w and button_y <= mouse_y <= button_y + button_h:
+                return
+
 
 def display_game_over(grid_height, grid_width, current_score, grid):
    background_color = Color(238, 228, 218)
