@@ -82,7 +82,9 @@ def start():
       # if paused, show PAUSED text and skip updates
       if reset:
          do_reset(grid)  # Reset the game grid
-         display_game_menu(grid_h, grid_w)
+         # re-select difficulty and apply to grid
+         selected_speed = display_game_menu(grid_h, grid_w)
+         grid.game_speed = selected_speed
          reset = False
          continue
 
