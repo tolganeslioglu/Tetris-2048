@@ -107,54 +107,10 @@ def create_tetromino():
 
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
-<<<<<<< Updated upstream
-   # the colors used for the menu
-   background_color = Color(42, 69, 99)
-   button_color = Color(25, 255, 228)
-   text_color = Color(31, 160, 239)
-   # clear the background drawing canvas to background_color
-   stddraw.clear(background_color)
-   # get the directory in which this python code file is placed
-   current_dir = os.path.dirname(os.path.realpath(__file__))
-   # compute the path of the image file
-   img_file = current_dir + "/images/menu_image.png"
-   # the coordinates to display the image centered horizontally
-   img_center_x, img_center_y = (grid_width - 1) / 2, grid_height - 7
-   # the image is modeled by using the Picture class
-   image_to_display = Picture(img_file)
-   # add the image to the drawing canvas
-   stddraw.picture(image_to_display, img_center_x, img_center_y)
-   # the dimensions for the start game button
-   button_w, button_h = grid_width - 1.5, 2
-   # the coordinates of the bottom left corner for the start game button
-   button_blc_x, button_blc_y = img_center_x - button_w / 2, 4
-   # add the start game button as a filled rectangle
-   stddraw.setPenColor(button_color)
-   stddraw.filledRectangle(button_blc_x, button_blc_y, button_w, button_h)
-   # add the text on the start game button
-   stddraw.setFontFamily("Arial")
-   stddraw.setFontSize(25)
-   stddraw.setPenColor(text_color)
-   text_to_display = "Click Here to Start the Game"
-   stddraw.text(img_center_x, 5, text_to_display)
-   # the user interaction loop for the simple menu
-   while True:
-      # display the menu and wait for a short time (50 ms)
-      stddraw.show(50)
-      # check if the mouse has been left-clicked on the start game button
-      if stddraw.mousePressed():
-         # get the coordinates of the most recent location at which the mouse
-         # has been left-clicked
-         mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
-         # check if these coordinates are inside the button
-         if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
-            if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
-               break  # break the loop to end the method and start the game
-=======
     # colors used for the menu
     background_color = Color(232,223,213)
-    button_color = Color(25, 255, 228)
-    text_color = Color(31, 160, 239)
+    button_color = Color(237,194,46)
+    text_color = Color(249,246,242)
     # difficulty button setup
     btn_w, btn_h = 2.0, 1.0
     # center group of buttons on screen
@@ -223,7 +179,6 @@ def display_game_menu(grid_height, grid_width):
                my >= start_y and my <= start_y + start_h and \
                selected_speed is not None:
                 return selected_speed
->>>>>>> Stashed changes
 
 
 # start() function is specified as the entry point (main function) from which
