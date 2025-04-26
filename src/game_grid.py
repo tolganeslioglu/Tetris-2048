@@ -197,23 +197,33 @@ class GameGrid:
 
    # Clearing full rows
    def clear_full_rows(self):
-      # remove any completely filled rows, shift above down
-      gained = 0
-      H, W = self.grid_height, self.grid_width
-      new_rows = []
-      for r in range(H):
-         row = self.tile_matrix[r]
-         if all(cell is not None for cell in row):
-            for cell in row:
-               gained += cell.number
+      cleared_count = 0
+
+      # Scan from bottom to top
+      row = 0
+      while row < self.grid_height:
+         # Check if this row is completely full
+         if all(self.tile_matrix[row][c] is not None for c in range(self.grid_width)):
+            # 1) Clear the row
+            for c in range(self.grid_width):
+               self.tile_matrix[row][c] = None
+
+            # 2) Shift everything above down by one
+            for r in range(row + 1, self.grid_height):
+               for c in range(self.grid_width):
+                  self.tile_matrix[r - 1][c] = self.tile_matrix[r][c]
+
+            # 3) Empty out the new top row
+            for c in range(self.grid_width):
+               self.tile_matrix[self.grid_height - 1][c] = None
+
+            cleared_count += 1
+            # Don’t advance row index—after shifting, this same row index now holds
+            # what used to be the row above, so we need to check it again.
          else:
-            new_rows.append(row)
-      # add empty rows at top
-      for _ in range(H - len(new_rows)):
-         new_rows.insert(0, [None]*W)
-      self.tile_matrix = np.array(new_rows)
-      self.score += gained
-      return gained
+            row += 1
+
+      return cleared_count
 
    # Handling free tiles (deleting free tiles)
    def handle_free_tiles(self):
