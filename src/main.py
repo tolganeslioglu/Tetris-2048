@@ -107,6 +107,7 @@ def create_tetromino():
 
 # A function for displaying a simple menu before starting the game
 def display_game_menu(grid_height, grid_width):
+<<<<<<< Updated upstream
    # the colors used for the menu
    background_color = Color(42, 69, 99)
    button_color = Color(25, 255, 228)
@@ -149,6 +150,80 @@ def display_game_menu(grid_height, grid_width):
          if mouse_x >= button_blc_x and mouse_x <= button_blc_x + button_w:
             if mouse_y >= button_blc_y and mouse_y <= button_blc_y + button_h:
                break  # break the loop to end the method and start the game
+=======
+    # colors used for the menu
+    background_color = Color(232,223,213)
+    button_color = Color(25, 255, 228)
+    text_color = Color(31, 160, 239)
+    # difficulty button setup
+    btn_w, btn_h = 2.0, 1.0
+    # center group of buttons on screen
+    center_x = (grid_width - 1) / 2
+    spacing = btn_w * 1.5
+    centers = [center_x - spacing, center_x, center_x + spacing]
+    labels = ["Easy", "Medium", "Hard"]
+    speeds = [150, 100, 50]
+    selected_speed = None
+
+    # compute image placement
+    current_dir = os.path.dirname(os.path.realpath(__file__))
+    img_file = current_dir + "/images/menu_image.png"
+    image_to_display = Picture(img_file)
+    img_center_x, img_center_y = (grid_width - 1) / 2, grid_height - 7
+
+    # vertical position for difficulty buttons: shifted down a bit
+    btn_center_y = grid_height / 2 - 2
+    # layout for start button
+    start_w, start_h = grid_width - 1.5, 2
+    start_x = img_center_x - start_w / 2
+    start_y = 4
+    start_text_y = 5
+
+    while True:
+        stddraw.clear(background_color)
+        # draw the image
+        stddraw.picture(image_to_display, img_center_x, img_center_y)
+
+        # draw difficulty buttons
+        stddraw.setFontFamily("Arial")
+        stddraw.setFontSize(20)
+        for i, x in enumerate(centers):
+            # button background
+            stddraw.setPenColor(button_color)
+            stddraw.filledRectangle(x - btn_w/2,
+                                    btn_center_y - btn_h/2,
+                                    btn_w, btn_h)
+            # outline if selected
+            if selected_speed == speeds[i]:
+                stddraw.setPenColor(text_color)
+                stddraw.rectangle(x - btn_w/2,
+                                  btn_center_y - btn_h/2,
+                                  btn_w, btn_h)
+            # label
+            stddraw.setPenColor(text_color)
+            stddraw.text(x, btn_center_y, labels[i])
+
+        # draw start button
+        stddraw.setPenColor(button_color)
+        stddraw.filledRectangle(start_x, start_y, start_w, start_h)
+        stddraw.setFontSize(25)
+        stddraw.setPenColor(text_color)
+        stddraw.text(img_center_x, start_text_y, "Click Here to Start the Game")
+
+        stddraw.show(50)
+        if stddraw.mousePressed():
+            mx, my = stddraw.mouseX(), stddraw.mouseY()
+            # check difficulty clicks
+            for i, x in enumerate(centers):
+                if (x - btn_w/2) <= mx <= (x + btn_w/2) and \
+                   (btn_center_y - btn_h/2) <= my <= (btn_center_y + btn_h/2):
+                    selected_speed = speeds[i]
+            # check start click
+            if mx >= start_x and mx <= start_x + start_w and \
+               my >= start_y and my <= start_y + start_h and \
+               selected_speed is not None:
+                return selected_speed
+>>>>>>> Stashed changes
 
 
 # start() function is specified as the entry point (main function) from which
