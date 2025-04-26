@@ -32,6 +32,20 @@ Merge the blocks and increase your score!
 
 ![image](https://github.com/user-attachments/assets/be9c74d5-82e7-455c-bbb7-4cc30f05c973)
 
+### 🏆 Win Screen
+
+Reach the 2048 block and you'll be greeted with this special screen!
+
+![WhatsApp Image 2025-04-26 at 17 15 32_ae879a62](https://github.com/user-attachments/assets/a0fa7407-1bd3-4e12-8e44-f056207391fc)
+
+### ⏸️ Pause Screen  
+
+Need a break? Press **P** anytime to pause the game.  
+Resume or restart whenever you're ready!
+
+![WhatsApp Image 2025-04-26 at 14 51 30_9f77589f](https://github.com/user-attachments/assets/889ee53a-dbb0-4ba9-9ef1-b3aa0f84c264)
+
+
 ### 🎮 How to Play
 
 Key | Action
