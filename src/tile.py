@@ -17,21 +17,21 @@ class Tile:
       self.update_color()
 
    def update_color(self):
-      # Determine the foreground (number) color
+      # Foreground color: dark border for 2 & 4, white for everything else
       if self.number in (2, 4):
          self.foreground_color = color.BOUNDRY_COLOR
       else:
          self.foreground_color = color.WHITE
 
-      # Determine the background color
-      background_color_name = f"TILE_{self.number}"
-      try:
-         self.background_color = getattr(color, background_color_name)
-      except AttributeError:
-         print(f"Warning: Color {background_color_name} not found. Using default TILE_2.")
-         self.background_color = color.TILE_2
+      # Background color: use TILE_<number> if it exists, otherwise TILE_2048
+      background_name = f"TILE_{self.number}"
+      if hasattr(color, background_name):
+         self.background_color = getattr(color, background_name)
+      else:
+         # Any tile >2048 uses the 2048 color
+         self.background_color = color.TILE_2048
 
-      # Box (boundary) color
+      # Box (boundary) color is always the grid line color
       self.box_color = color.LINE_COLOR
 
 
