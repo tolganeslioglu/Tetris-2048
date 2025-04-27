@@ -14,6 +14,9 @@ import random  # used for creating tetrominoes with random types (shapes)
 # sound lib
 import vlc
 
+# The Animation Delay variable
+MERGE_ANIM_DELAY = 150
+
 # The main function where this program starts execution
 def start():
    # Background music
@@ -115,27 +118,33 @@ def start():
                display_game_menu(grid_h, grid_w)  # Display the game menu again
                reset = False  # Reset the flag to False
                continue  # Restart the game      
+         
+         while True:
+            # 1) merges
+            if grid.merge_tiles():
+               _animate_step(grid)
+               continue
+            # 2) line clears
+            if grid.clear_full_rows():
+               _animate_step(grid)
+               continue
+            # 3) floating tiles
+            if grid.handle_free_tiles():
+               _animate_step(grid)
+               continue
+            break  # nothing left to do
 
-         MERGE_ANIM_DELAY = 150 # how long (in ms) to show each merge / cleared phase
-         while True: # The Loop
-            merged  = grid.merge_tiles()
-            cleared = grid.clear_full_rows()
-            freed   = grid.handle_free_tiles()
-            # draw this intermediate state with a short pause
-            if merged or cleared or freed:
-               # take the max out of delay and the game
-               delay_speed = max(MERGE_ANIM_DELAY, grid.game_speed)
-               old_speed = grid.game_speed
-               grid.game_speed = delay_speed
-               grid.display()
-               grid.game_speed = old_speed
-            else:
-               break
          grid.current_tetromino = grid.next_tetromino
          grid.next_tetromino = create_tetromino()
 
       # render the grid
       grid.display()
+
+def _animate_step(grid):
+   old_speed = grid.game_speed
+   grid.game_speed = max(MERGE_ANIM_DELAY, old_speed)
+   grid.display()
+   grid.game_speed = old_speed
 
 def do_reset(grid):
    grid.reset_scene()  # Reset the game grid
@@ -158,7 +167,6 @@ def create_tetromino():
 
 def check_win_condition(current_score):
     return current_score >= 2048
-
 
 def display_win_screen(grid_height, grid_width, current_score, grid):
     background_color = Color(238, 228, 218)
@@ -201,7 +209,6 @@ def display_win_screen(grid_height, grid_width, current_score, grid):
             if button_blc_x <= mouse_x <= button_blc_x + button_w and button_y <= mouse_y <= button_y + button_h:
                 return
 
-
 def display_game_over(grid_height, grid_width, current_score, grid):
    background_color = Color(238, 228, 218)
    button_color = Color(119, 110, 101)
@@ -242,8 +249,6 @@ def display_game_over(grid_height, grid_width, current_score, grid):
          mouse_x, mouse_y = stddraw.mouseX(), stddraw.mouseY()
          if button_blc_x <= mouse_x <= button_blc_x + button_w and button_y <= mouse_y <= button_y + button_h:
             return True
-
-
 
 def display_pause_menu(grid_height, grid_width):
     # Colors for pause menu
@@ -381,8 +386,6 @@ def display_game_menu(grid_height, grid_width):
                start_y <= my <= start_y + start_h and \
                selected_speed is not None:
                 return selected_speed
-
-
 
 # start() function is specified as the entry point (main function) from which
 # the program starts execution
