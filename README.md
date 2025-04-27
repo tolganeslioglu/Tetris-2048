@@ -9,6 +9,7 @@ pip install -r requirements.txt
 ```
 
 This command will automatically install all the dependencies listed in the "requirements.txt" file.
+Also, VLC Media Player must also be installed on your computer.
 
 ## 🚀 Features
 Tetris + 2048 Mechanics
