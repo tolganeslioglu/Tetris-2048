@@ -2,6 +2,12 @@
 Merge, place, and reach 2048!
 This project is a unique combination of the classic Tetris and the popular 2048 game.
 
+## 📦 Requirements
+
+pip install -r requirements.txt
+
+This command will automatically install all the dependencies listed in the "requirements.txt" file.
+
 ## 🚀 Features
 Tetris + 2048 Mechanics
 Place falling blocks and merge identical numbers to score points!
