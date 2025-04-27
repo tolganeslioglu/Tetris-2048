@@ -13,7 +13,7 @@ env/
 .vscode/
 
 # Highscore files
-*.txt
+highscore.txt
 
 # macOS files
 .DS_Store
