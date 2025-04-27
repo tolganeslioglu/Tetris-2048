@@ -117,7 +117,7 @@ def start():
                continue  # Restart the game      
 
          MERGE_ANIM_DELAY = 150 # how long (in ms) to show each merge / cleared phase
-         while True: # The Game Loop
+         while True: # The Loop
             merged  = grid.merge_tiles()
             cleared = grid.clear_full_rows()
             freed   = grid.handle_free_tiles()

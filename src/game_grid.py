@@ -172,7 +172,7 @@ class GameGrid:
          return False
       return True
    
-   # Mergin tiles
+   # Merging tiles
    def merge_tiles(self):
       gained = 0
       H, W = self.grid_height, self.grid_width
@@ -204,22 +204,22 @@ class GameGrid:
       while row < self.grid_height:
          # Check if this row is completely full
          if all(self.tile_matrix[row][c] is not None for c in range(self.grid_width)):
-            # 1) Clear the row
+            # Clear the row
             for c in range(self.grid_width):
                self.tile_matrix[row][c] = None
 
-            # 2) Shift everything above down by one
+            # Shift everything above down by one
             for r in range(row + 1, self.grid_height):
                for c in range(self.grid_width):
                   self.tile_matrix[r - 1][c] = self.tile_matrix[r][c]
 
-            # 3) Empty out the new top row
+            # Empty out the new top row
             for c in range(self.grid_width):
                self.tile_matrix[self.grid_height - 1][c] = None
 
             cleared_count += 1
-            # Don’t advance row index—after shifting, this same row index now holds
-            # what used to be the row above, so we need to check it again.
+            # Do not advance row index—after shifting this same row index now holds
+            # what used to be the row above so we need to check it again.
          else:
             row += 1
 
@@ -242,7 +242,7 @@ class GameGrid:
                if 0 <= rr < H and 0 <= cc < W and not visited[rr][cc] and self.tile_matrix[rr][cc]:
                   visited[rr][cc] = True
                   stack.append((rr, cc))
-      # remove unvisited (free) tiles
+      # remove unvisited/free tiles
       gained = 0
       for r in range(H):
          for c in range(W):
