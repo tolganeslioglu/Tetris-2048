@@ -4,7 +4,9 @@ This project is a unique combination of the classic Tetris and the popular 2048 
 
 ## 📦 Requirements
 
+```bash
 pip install -r requirements.txt
+```
 
 This command will automatically install all the dependencies listed in the "requirements.txt" file.
 
